@@ -24,4 +24,22 @@ minionsRouter.get('/:minionId', (request, response) => {
   response.send(minion);
 })
 
+
+minionsRouter.post('/', (request, response) => {
+  const newMinionObject = request.body;
+  // Validate that the required fields are present
+  if (!newMinionObject.name || !(newMinionObject.salary >= 0)) {
+    return response.status(400).send('Missing required fields');
+  }
+
+  // Add the new minion to the database
+  const newMinion = addToDatabase('minions', newMinionObject);
+  if (!newMinion) {
+    return response.status(400).send('Invalid minion data');
+  }
+
+  response.status(201).send(newMinion);
+});
+
+
 module.exports = minionsRouter;
