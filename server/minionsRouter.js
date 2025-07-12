@@ -24,7 +24,6 @@ minionsRouter.get('/:minionId', (request, response) => {
   response.send(minion);
 })
 
-
 minionsRouter.post('/', (request, response) => {
   const newMinionObject = request.body;
   // Validate that the required fields are present
@@ -39,6 +38,35 @@ minionsRouter.post('/', (request, response) => {
   }
 
   response.status(201).send(newMinion);
+});
+
+minionsRouter.put('/:minionId', (request, response) => {
+  const { minionId } = request.params;
+  const updatedMinionObject = request.body;
+
+  if (isNaN(minionId)) {
+    return response.status(404).send('Invalid minion ID');
+  }
+
+  const minion = getFromDatabaseById('minions', minionId);
+  if (!minion) {
+    return response.status(404).send('Minion not found');
+  }
+
+  if (!updatedMinionObject) {
+    return response.status(400).send('Invalid minion data');
+  }
+
+  if (minionId !== updatedMinionObject.id) {
+    return response.status(400).send('Minion ID mismatch');
+  }
+
+  const updatedMinion = updateInstanceInDatabase('minions', updatedMinionObject);
+  if (!updatedMinion) {
+    return response.status(400).send('Failed to update minion');
+  }
+
+  response.send(updatedMinion);
 });
 
 
