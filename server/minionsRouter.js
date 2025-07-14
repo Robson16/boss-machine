@@ -10,7 +10,7 @@ const {
 const minionsRouter = express.Router();
 
 minionsRouter.get('/', (request, response) => {
-  response.send(getAllFromDatabase('minions'));
+  return response.send(getAllFromDatabase('minions'));
 });
 
 minionsRouter.get('/:minionId', (request, response) => {
@@ -26,7 +26,7 @@ minionsRouter.get('/:minionId', (request, response) => {
     return response.status(404).send('Minion not found');
   }
 
-  response.send(minion);
+  return response.send(minion);
 })
 
 minionsRouter.post('/', (request, response) => {
@@ -44,7 +44,7 @@ minionsRouter.post('/', (request, response) => {
     return response.status(400).send('Invalid minion data');
   }
 
-  response.status(201).send(newMinion);
+  return response.status(201).send(newMinion);
 });
 
 minionsRouter.put('/:minionId', (request, response) => {
@@ -74,7 +74,7 @@ minionsRouter.put('/:minionId', (request, response) => {
     return response.status(400).send('Failed to update minion');
   }
 
-  response.send(updatedMinion);
+  return response.send(updatedMinion);
 });
 
 minionsRouter.delete('/:minionId', (request, response) => {
@@ -96,7 +96,7 @@ minionsRouter.delete('/:minionId', (request, response) => {
     return response.status(400).send('Failed to delete minion');
   }
 
-  response.status(204).send();
+  return response.status(204).send();
 });
 
 module.exports = minionsRouter;

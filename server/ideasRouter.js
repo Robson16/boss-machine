@@ -10,24 +10,25 @@ const {
 
 const ideasRouter = express.Router();
 
+ideasRouter.param('ideaId', (request, response, next, id) => {
+  const idea = getFromDatabaseById('ideas', id);
+
+  if (!idea) {
+    return response.status(404).send('Idea not found or invalid ID.');
+  }
+
+  // Attach the idea to the request object for use in subsequent handlers
+  request.idea = idea;
+
+  next();
+});
+
 ideasRouter.get('/', (request, response) => {
-  response.send(getAllFromDatabase('ideas'));
+  return response.send(getAllFromDatabase('ideas'));
 });
 
 ideasRouter.get('/:ideaId', (request, response) => {
-  const { ideaId } = request.params;
-
-  if (isNaN(ideaId)) {
-    return response.status(404).send('Invalid idea ID');
-  }
-
-  const idea = getFromDatabaseById('ideas', ideaId);
-
-  if (!idea) {
-    return response.status(404).send('Idea not found');
-  }
-
-  response.send(idea);
+  return response.send(request.idea);
 });
 
 ideasRouter.post('/', checkMillionDollarIdea, (request, response) => {
@@ -47,22 +48,11 @@ ideasRouter.post('/', checkMillionDollarIdea, (request, response) => {
     return response.status(400).send('Invalid idea data');
   }
 
-  response.status(201).send(newIdea);
+  return response.status(201).send(newIdea);
 });
 
 ideasRouter.put('/:ideaId', checkMillionDollarIdea, (request, response) => {
-  const { ideaId } = request.params;
   const updatedIdeaObject = request.body;
-
-  if (isNaN(ideaId)) {
-    return response.status(404).send('Invalid idea ID');
-  }
-
-  const idea = getFromDatabaseById('ideas', ideaId);
-
-  if (!idea) {
-    return response.status(404).send('Idea not found');
-  }
 
   if (!updatedIdeaObject) {
     return response.status(400).send('Invalid idea data');
@@ -70,30 +60,18 @@ ideasRouter.put('/:ideaId', checkMillionDollarIdea, (request, response) => {
 
   const updatedIdea = updateInstanceInDatabase('ideas', {
     ...updatedIdeaObject,
-    id: ideaId,
+    id: request.idea.id,
   });
 
   if (!updatedIdea) {
     return response.status(400).send('Failed to update idea');
   }
 
-  response.send(updatedIdea);
+  return response.send(updatedIdea);
 });
 
 ideasRouter.delete('/:ideaId', (request, response) => {
-  const { ideaId } = request.params;
-
-  if (isNaN(ideaId)) {
-    return response.status(404).send('Invalid idea ID');
-  }
-
-  const idea = getFromDatabaseById('ideas', ideaId);
-
-  if (!idea) {
-    return response.status(404).send('Idea not found');
-  }
-
-  const deleted = deleteFromDatabaseById('ideas', ideaId);
+  const deleted = deleteFromDatabaseById('ideas', request.idea.id);
 
   if (!deleted) {
     return response.status(400).send('Failed to delete idea');

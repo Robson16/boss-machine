@@ -9,7 +9,7 @@ const {
 const meetingsRouter = express.Router();
 
 meetingsRouter.get('/', (request, response) => {
-  response.send(getAllFromDatabase('meetings'));
+  return response.send(getAllFromDatabase('meetings'));
 });
 
 meetingsRouter.post('/', (request, response) => {
@@ -26,12 +26,12 @@ meetingsRouter.post('/', (request, response) => {
     return response.status(400).send('Invalid meeting data');
   }
 
-  response.status(201).send(newMeeting);
+  return response.status(201).send(newMeeting);
 });
 
 meetingsRouter.delete('/', (request, response) => {
   deleteAllFromDatabase('meetings');
-  response.status(204).send();
+  return response.status(204).send();
 });
 
 module.exports = meetingsRouter;
