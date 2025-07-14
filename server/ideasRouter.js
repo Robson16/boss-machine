@@ -79,4 +79,26 @@ ideasRouter.put('/:ideaId', (request, response) => {
   response.send(updatedIdea);
 });
 
+ideasRouter.delete('/:ideaId', (request, response) => {
+  const { ideaId } = request.params;
+
+  if (isNaN(ideaId)) {
+    return response.status(404).send('Invalid idea ID');
+  }
+
+  const idea = getFromDatabaseById('ideas', ideaId);
+
+  if (!idea) {
+    return response.status(404).send('Idea not found');
+  }
+
+  const deleted = deleteFromDatabaseById('ideas', ideaId);
+
+  if (!deleted) {
+    return response.status(400).send('Failed to delete idea');
+  }
+
+  response.status(204).send();
+});
+
 module.exports = ideasRouter;
