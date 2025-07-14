@@ -29,4 +29,24 @@ ideasRouter.get('/:ideaId', (request, response) => {
   response.send(idea);
 });
 
+ideasRouter.post('/', (request, response) => {
+  const newIdeaObject = request.body;
+
+  if (
+    !newIdeaObject.name ||
+    !newIdeaObject.weeklyRevenue ||
+    !newIdeaObject.numWeeks
+  ) {
+    return response.status(400).send('Missing required fields');
+  }
+
+  const newIdea = addToDatabase('ideas', newIdeaObject);
+
+  if (!newIdea) {
+    return response.status(400).send('Invalid idea data');
+  }
+
+  response.status(201).send(newIdea);
+});
+
 module.exports = ideasRouter;
