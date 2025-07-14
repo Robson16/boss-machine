@@ -1,4 +1,5 @@
 const express = require('express');
+const checkMillionDollarIdea = require('./checkMillionDollarIdea');
 const {
   getAllFromDatabase,
   getFromDatabaseById,
@@ -29,7 +30,7 @@ ideasRouter.get('/:ideaId', (request, response) => {
   response.send(idea);
 });
 
-ideasRouter.post('/', (request, response) => {
+ideasRouter.post('/', checkMillionDollarIdea, (request, response) => {
   const newIdeaObject = request.body;
 
   if (
@@ -49,7 +50,7 @@ ideasRouter.post('/', (request, response) => {
   response.status(201).send(newIdea);
 });
 
-ideasRouter.put('/:ideaId', (request, response) => {
+ideasRouter.put('/:ideaId', checkMillionDollarIdea, (request, response) => {
   const { ideaId } = request.params;
   const updatedIdeaObject = request.body;
 
