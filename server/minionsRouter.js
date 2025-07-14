@@ -69,5 +69,27 @@ minionsRouter.put('/:minionId', (request, response) => {
   response.send(updatedMinion);
 });
 
+minionsRouter.delete('/:minionId', (request, response) => {
+  const { minionId } = request.params;
+
+  if (isNaN(minionId)) {
+    return response.status(404).send('Invalid minion ID');
+  }
+
+  const minion = getFromDatabaseById('minions', minionId);
+
+  if (!minion) {
+    return response.status(404).send('Minion not found');
+  }
+
+  const deleted = deleteFromDatabasebyId('minions', minionId);
+
+  if (!deleted) {
+    return response.status(400).send('Failed to delete minion');
+  }
+
+  response.status(204).send();
+});
+
 
 module.exports = minionsRouter;
