@@ -4,7 +4,7 @@ const {
   getFromDatabaseById,
   addToDatabase,
   updateInstanceInDatabase,
-  deleteFromDatabasebyId,
+  deleteFromDatabaseById,
 } = require('./db');
 
 const minionsRouter = express.Router();
@@ -90,7 +90,7 @@ minionsRouter.delete('/:minionId', (request, response) => {
     return response.status(404).send('Minion not found');
   }
 
-  const deleted = deleteFromDatabasebyId('minions', minionId);
+  const deleted = deleteFromDatabaseById('minions', minionId);
 
   if (!deleted) {
     return response.status(400).send('Failed to delete minion');

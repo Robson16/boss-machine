@@ -82,7 +82,7 @@ The **server/db.js** file exports helper functions for working with the database
 
 - Takes the model name argument and a second argument which is an object representing an updated instance. The instance provided must have a valid `.id` property which will be used to match. `updateInstanceInDatabase` will return the updated instance in the database or `null` with invalid inputs. This function will validate the schema of the updated instance and throw an error if it is invalid.
 
-`deleteFromDatabasebyId`:
+`deleteFromDatabaseById`:
 
 - Takes the model name argument and a second string argument representing the unique ID of the element to delete. Returns `true` if the delete occurs properly and `false` if the element is not found.
 

@@ -4,7 +4,7 @@ const {
   getFromDatabaseById,
   addToDatabase,
   updateInstanceInDatabase,
-  deleteFromDatabasebyId,
+  deleteFromDatabaseById,
 } = require('./db');
 
 const ideasRouter = express.Router();
