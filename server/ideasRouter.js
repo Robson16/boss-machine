@@ -49,4 +49,34 @@ ideasRouter.post('/', (request, response) => {
   response.status(201).send(newIdea);
 });
 
+ideasRouter.put('/:ideaId', (request, response) => {
+  const { ideaId } = request.params;
+  const updatedIdeaObject = request.body;
+
+  if (isNaN(ideaId)) {
+    return response.status(404).send('Invalid idea ID');
+  }
+
+  const idea = getFromDatabaseById('ideas', ideaId);
+
+  if (!idea) {
+    return response.status(404).send('Idea not found');
+  }
+
+  if (!updatedIdeaObject) {
+    return response.status(400).send('Invalid idea data');
+  }
+
+  const updatedIdea = updateInstanceInDatabase('ideas', {
+    ...updatedIdeaObject,
+    id: ideaId,
+  });
+
+  if (!updatedIdea) {
+    return response.status(400).send('Failed to update idea');
+  }
+
+  response.send(updatedIdea);
+});
+
 module.exports = ideasRouter;
