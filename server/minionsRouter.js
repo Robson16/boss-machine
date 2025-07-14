@@ -15,6 +15,11 @@ minionsRouter.get('/', (request, response) => {
 
 minionsRouter.get('/:minionId', (request, response) => {
   const { minionId } = request.params;
+
+  if (isNaN(minionId)) {
+    return response.status(404).send('Invalid minion ID');
+  }
+
   const minion = getFromDatabaseById('minions', minionId);
 
   if (!minion) {
