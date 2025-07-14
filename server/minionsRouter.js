@@ -65,11 +65,10 @@ minionsRouter.put('/:minionId', (request, response) => {
     return response.status(400).send('Invalid minion data');
   }
 
-  if (minionId !== updatedMinionObject.id) {
-    return response.status(400).send('Minion ID mismatch');
-  }
-
-  const updatedMinion = updateInstanceInDatabase('minions', updatedMinionObject);
+  const updatedMinion = updateInstanceInDatabase('minions', {
+    ...updatedMinionObject,
+    id: minionId,
+  });
 
   if (!updatedMinion) {
     return response.status(400).send('Failed to update minion');
